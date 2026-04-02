@@ -1,14 +1,12 @@
 import React from 'react';
 import { 
-  TrendingUp, 
-  Target, 
   DollarSign, 
   ArrowUpRight, 
   ArrowDownRight,
   Sparkles,
   Calendar,
-  Clock,
-  ExternalLink
+  MessageCircle,
+  Zap
 } from 'lucide-react';
 import { 
   AreaChart, 
@@ -20,8 +18,7 @@ import {
   ResponsiveContainer,
   PieChart, 
   Pie, 
-  Cell,
-  Legend
+  Cell
 } from 'recharts';
 import { SummaryCard } from './SummaryCard';
 import { TREND_DATA, CATEGORY_BREAKDOWN, SUMMARY } from '../../data/mockData';
@@ -37,153 +34,155 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="dashboard-container">
-      {/* Human-Touch Header */}
-      <header className="dashboard-header">
+      {/* 🚀 Personable Header */}
+      <header className="dashboard-header-crafted">
         <div className="welcome-section">
-          <h1>Welcome back, Sunder <Sparkles className="sparkle-icon" size={24} /></h1>
-          <div className="date-display">
+          <div className="greeting-pill">Morning, Sunder! ☕</div>
+          <h1>Portfolio Snapshot <Sparkles className="sparkle-icon" size={20} /></h1>
+          <div className="date-badge">
             <Calendar size={14} />
             <span>{currentDate}</span>
-            <span className="dot">•</span>
-            <Clock size={14} />
-            <span>11:20 PM</span>
           </div>
         </div>
         
-        <div className="quick-actions">
-          <button className="action-pill primary">
-            <Sparkles size={14} />
-            Generate AI Report
+        <div className="quick-action-strip">
+          <button className="action-button-organic primary">
+            <Zap size={14} />
+            Run Audit
           </button>
-          <button className="action-pill secondary">
-            <ExternalLink size={14} />
-            Explore Logs
-          </button>
+          <div className="status-indicator">
+            <div className="pulse-dot" />
+            <span>Synced 2m ago</span>
+          </div>
         </div>
       </header>
 
-      {/* Main Grid View */}
-      <div className="dashboard-grid">
-        <SummaryCard 
-          title="Total Net Worth" 
-          amount={SUMMARY.totalBalance} 
-          icon={DollarSign} 
-          trend={12.4} 
-          type="positive"
-          color="#6366f1"
-        />
-        <SummaryCard 
-          title="Active Income" 
-          amount={SUMMARY.totalIncome} 
-          icon={ArrowUpRight} 
-          trend={8.2} 
-          type="positive"
-          color="#10b981"
-        />
-        <SummaryCard 
-          title="Debt & Expenses" 
-          amount={SUMMARY.totalExpenses} 
-          icon={ArrowDownRight} 
-          trend={4.9} 
-          type="negative"
-          color="#ef4444"
-        />
-        <SummaryCard 
-          title="Savings Milestone" 
-          amount={SUMMARY.totalBalance * 0.62} 
-          icon={Target} 
-          trend={2.1} 
-          type="positive"
-          color="#f59e0b"
-        />
+      {/* 📋 Handcrafted Grid Layout */}
+      <div className="dashboard-layout">
+        <div className="main-rail">
+          <div className="summary-cards-staggered">
+            <SummaryCard 
+              title="Net Liquid Cash" 
+              amount={SUMMARY.totalBalance} 
+              icon={DollarSign} 
+              trend={12.4} 
+              type="positive"
+              color="#6366f1"
+            />
+            <SummaryCard 
+              title="Passive Inflow" 
+              amount={SUMMARY.totalIncome} 
+              icon={ArrowUpRight} 
+              trend={8.2} 
+              type="positive"
+              color="#10b981"
+            />
+            <SummaryCard 
+              title="Burn Rate" 
+              amount={SUMMARY.totalExpenses} 
+              icon={ArrowDownRight} 
+              trend={4.9} 
+              type="negative"
+              color="#ef4444"
+            />
+          </div>
+
+          <div className="chart-card-custom trajectory-box">
+             <div className="chart-header-custom">
+                <div>
+                   <h3>Growth Pulse</h3>
+                   <p className="subtitle">Real-time balance velocity</p>
+                </div>
+                <div className="peak-pill">$8,240 Max</div>
+             </div>
+             <div className="chart-area">
+                <ResponsiveContainer width="100%" height={300}>
+                  <AreaChart data={TREND_DATA}>
+                    <defs>
+                      <linearGradient id="colorBalance" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#6366f1" stopOpacity={0.2}/>
+                        <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                    <XAxis dataKey="date" hide />
+                    <YAxis hide domain={['auto', 'auto']} />
+                    <Tooltip 
+                      contentStyle={{borderRadius: '16px', border: 'none', background: '#0f172a', color: 'white', fontWeight: 600}}
+                    />
+                    <Area 
+                      type="monotone" 
+                      dataKey="balance" 
+                      stroke="#6366f1" 
+                      strokeWidth={4} 
+                      fill="url(#colorBalance)" 
+                      animationDuration={2000}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+             </div>
+          </div>
+        </div>
+
+        <aside className="side-rail">
+          {/* ✍️ Handwritten Sticky Note (Human Kill) */}
+          <div className="sticky-note-wrapper">
+             <div className="sticky-note">
+                <div className="sticky-pin" />
+                <h4 className="handwritten">Personal Note:</h4>
+                <p className="handwritten">
+                  "Don't forget to pay the quarterly tax on the 15th. Also, rent increases next month by $50. Update the sheets!"
+                </p>
+                <div className="sticky-footer">
+                  <span className="handwritten">- Sunder</span>
+                </div>
+             </div>
+          </div>
+
+          <div className="interactive-widget budget-tracker">
+             <h4>Bucket Split</h4>
+             <div className="mini-pie-container">
+                <ResponsiveContainer width="100%" height={160}>
+                  <PieChart>
+                    <Pie
+                      data={CATEGORY_BREAKDOWN}
+                      innerRadius={45}
+                      outerRadius={65}
+                      stroke="none"
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {CATEGORY_BREAKDOWN.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+             </div>
+             <div className="legend-crafted">
+                {CATEGORY_BREAKDOWN.slice(0, 3).map(c => (
+                  <div key={c.name} className="legend-pill">
+                    <span className="dot" style={{backgroundColor: c.color}} />
+                    <span>{c.name}</span>
+                  </div>
+                ))}
+             </div>
+          </div>
+
+          <div className="tip-bubble">
+             <MessageCircle size={16} />
+             <span>Buy more index funds?</span>
+          </div>
+        </aside>
       </div>
 
-      <div className="charts-grid-modern">
-        <div className="chart-card-premium balance-area">
-          <div className="chart-info">
-            <div className="info-title">
-              <h3>Balance Trajectory</h3>
-              <p>Performance over current billing cycle</p>
-            </div>
-            <div className="chart-stat">
-              <span className="stat-label">Peak</span>
-              <span className="stat-value">$8,000</span>
-            </div>
-          </div>
-          <div className="chart-wrapper">
-            <ResponsiveContainer width="100%" height={260}>
-              <AreaChart data={TREND_DATA}>
-                <defs>
-                  <linearGradient id="colorBalance" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.2}/>
-                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="6 6" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="date" hide />
-                <YAxis hide domain={['auto', 'auto']} />
-                <Tooltip 
-                  contentStyle={{borderRadius: '16px', border: 'none', background: '#1e293b', color: 'white', fontSize: '12px'}}
-                />
-                <Area 
-                  type="stepAfter" 
-                  dataKey="balance" 
-                  stroke="#6366f1" 
-                  strokeWidth={4} 
-                  fill="url(#colorBalance)" 
-                  animationDuration={1500}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+      <footer className="footer-callout-organic">
+        <div className="callout-content">
+          <h3>Your momentum is building.</h3>
+          <p>You're in the top 5% of savers on Zorvyn this month. Let's keep it up!</p>
         </div>
-
-        <div className="chart-card-premium donut-pie">
-          <div className="chart-info">
-            <div className="info-title">
-              <h3>Allocation Pool</h3>
-              <p>Top categorical buckets</p>
-            </div>
-          </div>
-          <div className="chart-wrapper">
-            <ResponsiveContainer width="100%" height={220}>
-              <PieChart>
-                <Pie
-                  data={CATEGORY_BREAKDOWN}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={65}
-                  outerRadius={85}
-                  stroke="none"
-                  paddingAngle={8}
-                  dataKey="value"
-                >
-                  {CATEGORY_BREAKDOWN.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="category-legend">
-            {CATEGORY_BREAKDOWN.slice(0, 3).map(c => (
-              <div key={c.name} className="legend-item">
-                <span className="dot" style={{backgroundColor: c.color}} />
-                <span className="label">{c.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Inspirational Footer Section - Real Human Touch */}
-      <footer className="dashboard-footer-banner">
-        <div className="banner-content">
-          <h3>Your financial freedom score is increasing.</h3>
-          <p>You've saved **$842** more this month than your average. Keep the momentum!</p>
-        </div>
-        <button className="banner-btn">Plan Next Month</button>
+        <button className="callout-button">Plan Horizon</button>
       </footer>
     </div>
   );

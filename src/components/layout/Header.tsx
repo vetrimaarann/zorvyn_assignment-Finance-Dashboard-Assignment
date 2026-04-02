@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Bell, Sun, Moon, LayoutGrid } from 'lucide-react';
+import { Search, Bell, LayoutGrid } from 'lucide-react';
 import { useDashboardStore } from '../../store/useDashboard';
 import './Header.css';
 

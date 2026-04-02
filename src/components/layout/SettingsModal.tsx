@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, User, Bell, Shield, Moon, Palette } from 'lucide-react';
+import { X, User, Bell, Shield, Palette } from 'lucide-react';
 import './SettingsModal.css';
 
 interface SettingsModalProps {

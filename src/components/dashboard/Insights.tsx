@@ -1,12 +1,10 @@
 import React from 'react';
 import { 
   Lightbulb, 
-  TrendingUp, 
   AlertTriangle, 
   CheckCircle2, 
   ArrowRight,
   ShieldCheck,
-  Zap,
   Target
 } from 'lucide-react';
 import { useDashboardStore } from '../../store/useDashboard';
@@ -15,9 +13,7 @@ import './Insights.css';
 export const Insights: React.FC = () => {
   const { transactions } = useDashboardStore();
 
-  const totalSpent = transactions
-    .filter(t => t.type === 'EXPENSE')
-    .reduce((sum, t) => sum + t.amount, 0);
+
 
   const highestCategory = Object.entries(
     transactions
@@ -32,8 +28,8 @@ export const Insights: React.FC = () => {
     <div className="insights-container">
       <header className="insights-header">
         <div className="header-info">
-          <h2>Intelligence Engine <Zap size={18} fill="#f59e0b" color="#f59e0b" /></h2>
-          <p>Heuristic-based analysis of your financial footprint</p>
+          <h2>My Financial Watchdog 🐕</h2>
+          <p>A quick breakdown of how I'm doing this month</p>
         </div>
         <div className="intelligence-score">
           <div className="score-circle">

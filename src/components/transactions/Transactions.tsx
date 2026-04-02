@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import { 
-  Filter, 
   Search, 
   Plus, 
   Trash2, 
@@ -10,7 +9,7 @@ import {
   CreditCard,
   Zap
 } from 'lucide-react';
-import type { Transaction, TransactionType } from '../../types';
+import type { Transaction } from '../../types';
 import { useDashboardStore } from '../../store/useDashboard';
 import { TransactionModal } from './TransactionModal';
 import './Transactions.css';
