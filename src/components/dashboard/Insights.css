@@ -1,0 +1,99 @@
+.insights-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.insight-card {
+  background-color: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  transition: all 0.3s ease;
+}
+
+.insight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-left: 4px solid var(--primary);
+}
+
+.insight-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.insight-icon.platinum { background-color: var(--primary-bg); color: var(--primary); }
+.insight-icon.success { background-color: rgba(16, 185, 129, 0.1); color: var(--success); }
+.insight-icon.alert { background-color: rgba(239, 68, 68, 0.1); color: var(--danger); }
+.insight-icon.check { background-color: rgba(16, 185, 129, 0.1); color: var(--success); }
+.insight-icon.info { background-color: var(--primary-bg); color: var(--secondary); }
+
+.insight-content h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-500);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.insight-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-900);
+  margin-bottom: 0.75rem;
+}
+
+.insight-description {
+  font-size: 0.9rem;
+  color: var(--text-700);
+  line-height: 1.5;
+}
+
+.pro-tips {
+  background-color: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--surface-border);
+}
+
+.pro-tips h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-900);
+  margin-bottom: 1.5rem;
+}
+
+.tip-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--bg-50);
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+  color: var(--text-700);
+}
+
+.tip-item svg {
+  color: var(--secondary);
+}
+
+.tip-item:last-child {
+  margin-bottom: 0;
+}

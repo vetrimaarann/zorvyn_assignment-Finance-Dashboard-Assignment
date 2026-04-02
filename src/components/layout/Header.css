@@ -1,0 +1,136 @@
+.header {
+  height: var(--header-height);
+  background-color: var(--white);
+  border-bottom: 1px solid var(--surface-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-search {
+  position: relative;
+  width: 300px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-500);
+}
+
+.header-search input {
+  width: 100%;
+  padding: 0.6rem 1rem 0.6rem 2.8rem;
+  border-radius: 999px;
+  background-color: var(--bg-100);
+  border: 1px solid transparent;
+  outline: none;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.header-search input:focus {
+  border-color: var(--primary);
+  background-color: var(--white);
+  box-shadow: 0 0 0 4px var(--primary-bg);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.role-switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-right: 1.5rem;
+  border-right: 1px solid var(--surface-border);
+  padding-right: 1.5rem;
+}
+
+.role-switcher label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-500);
+  text-transform: uppercase;
+}
+
+.role-select {
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid var(--surface-border);
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.role-select.admin {
+  background-color: var(--primary-bg);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.role-select.viewer {
+  background-color: var(--bg-100);
+  color: var(--text-700);
+}
+
+.action-btn {
+  background: transparent;
+  color: var(--text-500);
+  position: relative;
+  padding: 0.25rem;
+  transition: color 0.2s ease;
+}
+
+.action-btn:hover {
+  color: var(--primary);
+}
+
+.notification-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--danger);
+  border-radius: 50%;
+  border: 2px solid var(--white);
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-900);
+}
+
+.user-role {
+  font-size: 0.75rem;
+  color: var(--text-500);
+}
+
+.chevron {
+  color: var(--text-500);
+}
