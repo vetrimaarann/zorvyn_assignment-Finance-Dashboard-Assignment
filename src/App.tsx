@@ -4,32 +4,42 @@ import { Header } from './components/layout/Header';
 import { Dashboard } from './components/dashboard/Dashboard';
 import { Transactions } from './components/transactions/Transactions';
 import { Insights } from './components/dashboard/Insights';
+import { useDashboardStore } from './store/useDashboard';
+import { SettingsModal } from './components/layout/SettingsModal';
 import './styles/variables.css';
 import './App.css';
 
-type Tab = 'dashboard' | 'transactions' | 'insights';
-
 function App() {
-  const [activeTab, setActiveTab] = useState<Tab>('dashboard');
+  const { activeTab, setActiveTab } = useDashboardStore();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'dashboard': return <Dashboard />;
-      case 'transactions': return <Transactions />;
-      case 'insights': return <Insights />;
-      default: return <Dashboard />;
+      case 'Overview':
+        return <Dashboard />;
+      case 'Transactions':
+        return <Transactions />;
+      case 'Insights':
+        return <Insights />;
+      default:
+        return <Dashboard />;
     }
   };
 
   return (
     <div className="app-container">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Sidebar 
+        activeTab={activeTab} 
+        onTabChange={setActiveTab} 
+        onOpenSettings={() => setIsSettingsOpen(true)} 
+      />
       <div className="main-content">
         <Header />
         <main className="content-area">
           {renderContent()}
         </main>
       </div>
+      <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
     </div>
   );
 }
