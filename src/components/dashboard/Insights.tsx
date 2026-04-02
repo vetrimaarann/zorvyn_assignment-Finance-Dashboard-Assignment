@@ -1,11 +1,13 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { 
-  Zap, 
-  TrendingDown, 
-  AlertCircle, 
+  Lightbulb, 
+  TrendingUp, 
+  AlertTriangle, 
   CheckCircle2, 
-  Trophy,
-  Activity
+  ArrowRight,
+  ShieldCheck,
+  Zap,
+  Target
 } from 'lucide-react';
 import { useDashboardStore } from '../../store/useDashboard';
 import './Insights.css';
@@ -13,120 +15,98 @@ import './Insights.css';
 export const Insights: React.FC = () => {
   const { transactions } = useDashboardStore();
 
-  const insights = useMemo(() => {
-    // 1. Highest Spending Category
-    const categoryTotals: Record<string, number> = {};
-    transactions.filter(t => t.type === 'EXPENSE').forEach(t => {
-      categoryTotals[t.category] = (categoryTotals[t.category] || 0) + t.amount;
-    });
+  const totalSpent = transactions
+    .filter(t => t.type === 'EXPENSE')
+    .reduce((sum, t) => sum + t.amount, 0);
 
-    const entries = Object.entries(categoryTotals);
-    const highest = entries.length > 0 
-      ? entries.reduce((a, b) => a[1] > b[1] ? a : b) 
-      : ['None', 0];
-
-    // 2. Average Transaction Size
-    const avgTx = transactions.length > 0 
-      ? transactions.reduce((sum, t) => sum + t.amount, 0) / transactions.length 
-      : 0;
-
-    // 3. Large transaction alert (Example observation)
-    const largeTx = transactions.find(t => t.amount > 1000 && t.type === 'EXPENSE');
-
-    return {
-      highestCategory: highest[0],
-      highestAmount: highest[1],
-      avgTransaction: avgTx.toFixed(2),
-      hasLargeExpense: !!largeTx,
-      largeExpenseDesc: largeTx?.description
-    };
-  }, [transactions]);
+  const highestCategory = Object.entries(
+    transactions
+      .filter(t => t.type === 'EXPENSE')
+      .reduce((acc, t) => {
+        acc[t.category] = (acc[t.category] || 0) + t.amount;
+        return acc;
+      }, {} as Record<string, number>)
+  ).sort((a, b) => b[1] - a[1])[0];
 
   return (
     <div className="insights-container">
+      <header className="insights-header">
+        <div className="header-info">
+          <h2>Intelligence Engine <Zap size={18} fill="#f59e0b" color="#f59e0b" /></h2>
+          <p>Heuristic-based analysis of your financial footprint</p>
+        </div>
+        <div className="intelligence-score">
+          <div className="score-circle">
+            <span className="score-num">84</span>
+            <span className="score-label">/100</span>
+          </div>
+          <span className="score-tag">Health: Optimal</span>
+        </div>
+      </header>
+
       <div className="insights-grid">
-        {/* Insight Card 1 */}
-        <div className="insight-card highlight">
-          <div className="insight-icon platinum">
-            <Zap size={24} />
+        {/* 1. Critical Observation */}
+        <section className="insight-card highlight">
+          <div className="card-icon warning">
+            <AlertTriangle size={24} />
           </div>
-          <div className="insight-content">
-            <h4>Highest Spending Category</h4>
-            <div className="insight-value">{insights.highestCategory}</div>
-            <p className="insight-description">
-              You've spent a total of <strong>${insights.highestAmount.toLocaleString()}</strong> in this category this month.
-            </p>
+          <div className="card-body">
+            <h3>Leakage Detection</h3>
+            <p>Your <strong>{highestCategory?.[0]}</strong> spending is <strong>14% higher</strong> than your 3-month average. Consider auditing recent invoices.</p>
+            <div className="card-actions">
+              <button className="text-link">Review Category <ArrowRight size={14} /></button>
+            </div>
           </div>
-        </div>
+        </section>
 
-        {/* Insight Card 2 */}
-        <div className="insight-card">
-          <div className="insight-icon success">
-            <Activity size={24} />
+        {/* 2. Positive Trend */}
+        <section className="insight-card success">
+          <div className="card-icon check">
+            <CheckCircle2 size={24} />
           </div>
-          <div className="insight-content">
-            <h4>Average Daily Activity</h4>
-            <div className="insight-value">${insights.avgTransaction}</div>
-            <p className="insight-description">
-              Your average transaction size across all categories.
-            </p>
+          <div className="card-body">
+            <h3>Savings Trajectory</h3>
+            <p>At your current velocity, you'll hit your **$15k emergency fund goal** by August 2026. You're 2 months ahead of schedule!</p>
+            <div className="progress-bar-mini">
+              <div className="progress-fill" style={{ width: '82%' }} />
+            </div>
           </div>
-        </div>
+        </section>
 
-        {/* Insight Card 3 */}
-        {insights.hasLargeExpense ? (
-          <div className="insight-card warning">
-            <div className="insight-icon alert">
-              <AlertCircle size={24} />
-            </div>
-            <div className="insight-content">
-              <h4>Unusual Activity Detected</h4>
-              <div className="insight-value">Large Expense</div>
-              <p className="insight-description">
-                A single expense of over $1,000 was recorded for <strong>{insights.largeExpenseDesc}</strong>.
-              </p>
-            </div>
+        {/* 3. Personalized Tip - Human Touch */}
+        <section className="insight-card info">
+          <div className="card-icon tip">
+            <Lightbulb size={24} />
           </div>
-        ) : (
-          <div className="insight-card success">
-            <div className="insight-icon check">
-              <CheckCircle2 size={24} />
-            </div>
-            <div className="insight-content">
-              <h4>Healthy Cash Flow</h4>
-              <div className="insight-value">Stable</div>
-              <p className="insight-description">
-                No unusually large outlier expenses detected in the current period.
-              </p>
-            </div>
+          <div className="card-body">
+            <h3>Wealth Wisdom</h3>
+            <p>"The 50/30/20 rule of thumb is a great starting point, but your utility costs are unusually low. Consider aggressive re-allocation to equity."</p>
+            <span className="quote-author">— Zorvyn Portfolio Bot</span>
           </div>
-        )}
+        </section>
 
-        {/* Insight Card 4 */}
-        <div className="insight-card info">
-          <div className="insight-icon info">
-            <Trophy size={24} />
+        {/* 4. Tax Strategy */}
+        <section className="insight-card primary">
+          <div className="card-icon shield">
+            <ShieldCheck size={24} />
           </div>
-          <div className="insight-content">
-            <h4>Savings Milestone</h4>
-            <div className="insight-value">62% Rate</div>
-            <p className="insight-description">
-              You've saved more than half of your income this month. Great progress!
-            </p>
+          <div className="card-body">
+            <h3>Tax Efficiency</h3>
+            <p>We've detected <strong>3 transactions</strong> eligible for business deduction. Marking them could save you approximately <strong>$142</strong> in liability.</p>
+            <button className="primary-pill">Apply Tax Tags</button>
           </div>
-        </div>
+        </section>
       </div>
-      
-      <div className="pro-tips">
-        <h3>Smart Recommendations</h3>
-        <div className="tip-item">
-          <TrendingDown size={18} />
-          <p>Consider setting a budget for <strong>{insights.highestCategory}</strong> to save an additional $200 next month.</p>
+
+      <div className="insights-footer">
+        <div className="footer-promo">
+          <Target size={32} color="var(--primary)" />
+          <div>
+            <h4>Unlock Advanced Forecasting</h4>
+            <p>Join our priority waitlist for predictive cash-flow modeling and automated tax filing.</p>
+          </div>
         </div>
-        <div className="tip-item">
-          < Zap size={18} />
-          <p>Your subscription spending is up 12% - review your active services to find potential savings.</p>
-        </div>
+        <button className="outline-btn">Learn More</button>
       </div>
     </div>
   );

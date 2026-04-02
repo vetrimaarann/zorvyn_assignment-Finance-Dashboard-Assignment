@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { 
   Filter, 
   Search, 
@@ -7,10 +7,12 @@ import {
   ArrowUp, 
   ArrowDown, 
   SearchX,
-  CreditCard
+  CreditCard,
+  Zap
 } from 'lucide-react';
 import type { Transaction, TransactionType } from '../../types';
 import { useDashboardStore } from '../../store/useDashboard';
+import { TransactionModal } from './TransactionModal';
 import './Transactions.css';
 
 export const Transactions: React.FC = () => {
@@ -28,62 +30,59 @@ export const Transactions: React.FC = () => {
     getFilteredTransactions
   } = useDashboardStore();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const filteredTx = useMemo(() => getFilteredTransactions(), [
     transactions, searchQuery, categoryFilter, typeFilter, getFilteredTransactions
   ]);
 
   const categories = Array.from(new Set(transactions.map(t => t.category)));
 
-  const handleAddDemo = () => {
-    addTransaction({
-      date: new Date().toISOString().split('T')[0],
-      description: 'Demo Transaction',
-      amount: Math.floor(Math.random() * 500) + 1,
-      category: 'Other',
-      type: 'EXPENSE'
-    });
+  const handleSaveTransaction = (tx: Omit<Transaction, 'id'>) => {
+    addTransaction(tx);
   };
 
   return (
     <div className="transactions-container">
-      <div className="tx-header">
-        <div className="tx-title-section">
-          <h2>Transactional History</h2>
-          <p>Displaying {filteredTx.length} records found in search</p>
+      <header className="transactions-header">
+        <div className="header-info">
+          <h2>Cash Log Explorer <Zap size={18} fill="#f59e0b" color="#f59e0b" /></h2>
+          <p>Real-time audit of {filteredTx.length} records in your workspace</p>
         </div>
         
         {role === 'ADMIN' && (
-          <button className="add-btn" onClick={handleAddDemo}>
+          <button className="add-btn-premium" onClick={() => setIsModalOpen(true)}>
             <Plus size={18} />
-            <span>Add Transaction</span>
+            <span>Record Entry</span>
           </button>
         )}
-      </div>
+      </header>
 
-      <div className="tx-controls">
-        <div className="search-box">
+      <div className="tx-controls-premium">
+        <div className="search-pill-large">
           <Search size={18} />
           <input 
             type="text" 
-            placeholder="Search descriptions..." 
+            placeholder="Search descriptions, categories, or audit logs..." 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
-        <div className="filters">
-          <div className="filter-group">
-            <Filter size={14} />
+        <div className="filter-shelf">
+          <div className="filter-pill">
+            <span className="pill-label">Process:</span>
             <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value as any)}>
-              <option value="ALL">All Types</option>
-              <option value="INCOME">Income</option>
-              <option value="EXPENSE">Expense</option>
+              <option value="ALL">All Flows</option>
+              <option value="INCOME">Income ONLY</option>
+              <option value="EXPENSE">Expense ONLY</option>
             </select>
           </div>
 
-          <div className="filter-group">
+          <div className="filter-pill">
+            <span className="pill-label">Bucket:</span>
             <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
-              <option value="ALL">All Categories</option>
+              <option value="ALL">All Buckets</option>
               {categories.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
@@ -95,18 +94,18 @@ export const Transactions: React.FC = () => {
           <table className="tx-table">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Type</th>
-                {role === 'ADMIN' && <th className="actions-col">Actions</th>}
+                <th style={{ width: '120px' }}>Date</th>
+                <th>Transaction Log</th>
+                <th>Segment</th>
+                <th style={{ textAlign: 'right' }}>Magnitude</th>
+                <th style={{ textAlign: 'center' }}>Velocity</th>
+                {role === 'ADMIN' && <th className="actions-col">Audit</th>}
               </tr>
             </thead>
             <tbody>
               {filteredTx.map((tx) => (
                 <tr key={tx.id} className="tx-row">
-                  <td>{tx.date}</td>
+                  <td className="date-cell">{tx.date}</td>
                   <td>
                     <div className="description-cell">
                       <div className="description-icon">
@@ -116,13 +115,13 @@ export const Transactions: React.FC = () => {
                     </div>
                   </td>
                   <td><span className="category-tag">{tx.category}</span></td>
-                  <td>
-                    <span className={`amount ${tx.type === 'INCOME' ? 'income' : 'expense'}`}>
-                      {tx.type === 'INCOME' ? '+' : '-'} ${tx.amount.toLocaleString()}
+                  <td style={{ textAlign: 'right' }}>
+                    <span className={`amount-modern ${tx.type === 'INCOME' ? 'income' : 'expense'}`}>
+                      {tx.type === 'INCOME' ? '+' : '-'} {tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </span>
                   </td>
                   <td>
-                    <div className={`type-tag ${tx.type.toLowerCase()}`}>
+                    <div className={`velocity-tag ${tx.type.toLowerCase()}`}>
                       {tx.type === 'INCOME' ? <ArrowUp size={12} /> : <ArrowDown size={12} />}
                       {tx.type}
                     </div>
@@ -130,9 +129,9 @@ export const Transactions: React.FC = () => {
                   {role === 'ADMIN' && (
                     <td className="actions-col">
                       <button 
-                        className="delete-btn" 
+                        className="audit-btn" 
                         onClick={() => deleteTransaction(tx.id)}
-                        title="Delete transaction"
+                        title="Delete log entry"
                       >
                         <Trash2 size={16} />
                       </button>
@@ -145,11 +144,17 @@ export const Transactions: React.FC = () => {
         ) : (
           <div className="empty-state">
             <SearchX size={48} />
-            <h3>No results found</h3>
-            <p>Try adjusting your search query or filters.</p>
+            <h3>No audit records found</h3>
+            <p>Refine your search parameters or check filters.</p>
           </div>
         )}
       </div>
+
+      <TransactionModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        onSave={handleSaveTransaction} 
+      />
     </div>
   );
 };

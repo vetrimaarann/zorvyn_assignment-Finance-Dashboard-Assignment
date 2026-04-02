@@ -1,51 +1,51 @@
 import React from 'react';
-import { Search, Bell, UserCircle2, ChevronDown } from 'lucide-react';
+import { Search, Bell, Sun, Moon, LayoutGrid } from 'lucide-react';
 import { useDashboardStore } from '../../store/useDashboard';
-import { ThemeToggle } from './ThemeToggle';
 import './Header.css';
 
 export const Header: React.FC = () => {
   const { role, setRole } = useDashboardStore();
 
   return (
-    <header className="header">
+    <header className="main-header">
       <div className="header-search">
-        <Search size={18} className="search-icon" />
-        <input type="text" placeholder="Search transactions, insights..." />
+        <div className="search-pill">
+          <Search size={16} className="search-icon" />
+          <input type="text" placeholder="Jump to command or log..." />
+          <kbd className="search-kbd">⌘K</kbd>
+        </div>
       </div>
 
-      <div className="header-actions">
-        {/* Role Switcher - Demo Feature */}
+      <div className="header-tools">
         <div className="role-switcher">
-          <label htmlFor="role-select">Access level</label>
-          <select 
-            id="role-select" 
-            value={role} 
-            onChange={(e) => setRole(e.target.value as any)}
-            className={`role-select ${role === 'ADMIN' ? 'admin' : 'viewer'}`}
+          <span className="switcher-label">View:</span>
+          <button 
+            className={`switch-btn ${role === 'VIEWER' ? 'active' : ''}`}
+            onClick={() => setRole('VIEWER')}
           >
-            <option value="ADMIN">Admin Mod</option>
-            <option value="VIEWER">Viewer Only</option>
-          </select>
+            Viewer
+          </button>
+          <button 
+            className={`switch-btn ${role === 'ADMIN' ? 'active' : ''}`}
+            onClick={() => setRole('ADMIN')}
+          >
+            Admin
+          </button>
         </div>
 
-        <ThemeToggle />
+        <div className="vertical-divider" />
 
-        <button className="action-btn">
-          <Bell size={20} />
-          <span className="notification-dot"></span>
+        <button className="tool-icon-btn">
+          <Bell size={18} />
+          <span className="notif-badge" />
         </button>
 
-        <div className="user-profile">
-          <div className="user-avatar">
-            <UserCircle2 size={24} />
+        <button className="tool-icon-btn profile-trigger">
+          <div className="profile-pill">
+            <LayoutGrid size={16} />
+            <span>Workspace</span>
           </div>
-          <div className="user-info">
-            <span className="user-name">Sunder G</span>
-            <span className="user-role">{role === 'ADMIN' ? 'Administrator' : 'Financial Analyst'}</span>
-          </div>
-          <ChevronDown size={14} className="chevron" />
-        </div>
+        </button>
       </div>
     </header>
   );
